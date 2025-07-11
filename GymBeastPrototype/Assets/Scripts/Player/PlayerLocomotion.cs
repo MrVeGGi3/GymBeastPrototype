@@ -1,15 +1,19 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PlayerLocomotion : MonoBehaviour
+public class PlayerLocomotion : Player
 {
     [SerializeField] public float walkSpeed;
     [SerializeField] public float runSpeed;
     [SerializeField] public FloatingJoystick joystick;
 
+    private bool isAttacking = false;
     private float moveSpeed;
     private Rigidbody _rb;
     Animator _animator;
+
+    private Vector3 _direction;
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -17,22 +21,41 @@ public class PlayerLocomotion : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        Vector3 direction = new Vector3(joystick.Horizontal, 0.0f, joystick.Vertical);
+        _direction = new Vector3(joystick.Horizontal, 0.0f, joystick.Vertical);
         
-        if (direction.magnitude == 0.0f)
+        if (_direction.magnitude == 0.0f)
         {
             moveSpeed = Mathf.Lerp(moveSpeed, 0.0f, walkSpeed);
         }
         else
         {
-            moveSpeed += Mathf.Lerp(moveSpeed, runSpeed, walkSpeed);
-            Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+            moveSpeed = Mathf.Lerp(moveSpeed, runSpeed, walkSpeed);
+            Quaternion rotation = Quaternion.LookRotation(_direction, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 500 * Time.fixedDeltaTime);
         }
-         _rb.MovePosition(_rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+         _rb.MovePosition(_rb.position + _direction * moveSpeed * Time.fixedDeltaTime);
 
         _animator.SetFloat("Speed", moveSpeed);
     }
 
+    public Vector3 GetPlayerDirection()
+    {
+        return _direction;
+    }
 
+    public void TriggerPunch()
+    {
+        if (isAttacking) return;
+
+        Debug.Log("Player: Estou executando a Animação de Ataque");
+        isAttacking = true;
+        _animator.Play("Punch", 0, 0f);
+        StartCoroutine(ResetAttack());
+    }
+
+    private IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(1.20f);
+        isAttacking = false;
+    }
 }
