@@ -18,6 +18,8 @@ public class PlayerLocomotion : Player
     {
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+
+        SetRigidBodyInitialStatus();
     }
     private void FixedUpdate()
     {
@@ -57,5 +59,17 @@ public class PlayerLocomotion : Player
     {
         yield return new WaitForSeconds(1.20f);
         isAttacking = false;
+
+        if (_direction != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(_direction, Vector3.up);
+            transform.rotation = rotation;
+        }
+    }
+
+    private void SetRigidBodyInitialStatus()
+    {
+        _rb.isKinematic = false;
+        _rb.freezeRotation = true;
     }
 }

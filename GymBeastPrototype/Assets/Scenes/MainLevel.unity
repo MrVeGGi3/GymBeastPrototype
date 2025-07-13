@@ -375,8 +375,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3329958545760614173, guid: b8f8a4592b597134ba28bd32f106f072, type: 3}
+      propertyPath: m_WarningMessage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3329958545760614173, guid: b8f8a4592b597134ba28bd32f106f072, type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5746313721437378205, guid: b8f8a4592b597134ba28bd32f106f072, type: 3}
       propertyPath: m_LocalPosition.y
@@ -512,6 +516,14 @@ PrefabInstance:
     - target: {fileID: 6912395229074514917, guid: a1a68b073683f5748bbef0da5ad230e9, type: 3}
       propertyPath: forceMultiplier
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6912395229074514917, guid: a1a68b073683f5748bbef0da5ad230e9, type: 3}
+      propertyPath: isCarryByPlayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6912395229074514917, guid: a1a68b073683f5748bbef0da5ad230e9, type: 3}
+      propertyPath: collisionCooldown
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
