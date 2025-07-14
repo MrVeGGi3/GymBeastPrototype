@@ -4,12 +4,17 @@ using UnityEngine.UIElements;
 
 public class PlayerLocomotion : Player
 {
+
+    [Header("Player Movement")]
     [SerializeField] public float walkSpeed;
     [SerializeField] public float runSpeed;
+    private float moveSpeed;
     [SerializeField] public FloatingJoystick joystick;
 
+    [Header("Attack Control")]
     private bool isAttacking = false;
-    private float moveSpeed;
+
+    [Header("Components")]
     private Rigidbody _rb;
     Animator _animator;
 
@@ -51,7 +56,7 @@ public class PlayerLocomotion : Player
 
         Debug.Log("Player: Estou executando a Animação de Ataque");
         isAttacking = true;
-        _animator.Play("Punch", 0, 0f);
+        _animator.SetTrigger("AttackTrigger");
         StartCoroutine(ResetAttack());
     }
 

@@ -1,24 +1,23 @@
 using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour 
 {
-    public int enemiesCollected;
-    public int maxEnemiesToCollect;
+
+    [Header("Money")]
     public float moneyCatched;
+    [Header("EnemyHolder Component")]
+    [SerializeField] public EnemyHolder enemyHolder;
+  
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void addEnemy(EnemyCollisionBehaviour enemy)
     {
-        
+        if (enemyHolder.checkCanAddEnemies())
+        {
+            enemy.EnablePlayerHolderState();
+            enemyHolder.AddEnemyToList(enemy);
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
- 
-
-    }
-    
 
 }

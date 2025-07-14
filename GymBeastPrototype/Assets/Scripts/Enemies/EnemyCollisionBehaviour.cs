@@ -1,34 +1,39 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyCollisionBehaviour : Enemy
 {
+    [Header("Collision Attributes")]
     [SerializeField] public float forceMultiplier;
     [SerializeField] private float collisionCooldown;
 
+    [Header("Collision Elements")]
     public Animator animator;
     private Rigidbody _rb;
     private Rigidbody[] _ragdollRigidbodies;
     private Collider[] _ragdollColliders;
     private Collider _mainCollider;
 
-
     private bool canCollide = true;
-    private int playerCollisionCount = 0;
 
+    private void Awake()
+    {
+        _ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
+        _ragdollColliders = GetComponentsInChildren<Collider>();
+        _mainCollider = GetComponent<Collider>();
+        animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
+    }
 
     void Start()
     {
-        animator = GetComponent<Animator>();
-        _rb = GetComponent<Rigidbody>();
-        _mainCollider = GetComponent<Collider>();
-        _ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
-        _ragdollColliders = GetComponentsInChildren<Collider>();
         DisableRagdoll();
     }
 
     private void DisableRagdoll()
     {
+        animator.enabled = true;
         Debug.Log("Disabling Ragdoll");
         foreach (var rb in _ragdollRigidbodies)
         {
@@ -36,13 +41,10 @@ public class EnemyCollisionBehaviour : Enemy
         }
         foreach (var col in _ragdollColliders)
         {
-            if (col.gameObject != this.gameObject)
-            {
-                col.enabled = false;
-            }
+            col.enabled = false;
         }
-
-        animator.enabled = true;
+        _mainCollider.enabled = true;
+        _rb.isKinematic = true;
     }
     private void EnableRagdoll(Vector3 forceDirection)
     {
@@ -60,8 +62,18 @@ public class EnemyCollisionBehaviour : Enemy
         {
             col.enabled = true;
         }
-        StartCoroutine(EnableMainCollider());
-        StartCoroutine(DisableCollider());
+
+        _mainCollider.enabled = true;
+        _rb.isKinematic = false;
+
+        canCollide = false;
+    }
+
+    public void EnablePlayerHolderState()
+    {
+
+        DisableRagdoll();
+        _mainCollider.enabled = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -70,41 +82,24 @@ public class EnemyCollisionBehaviour : Enemy
         {
             if (canCollide)
             {
-                playerCollisionCount++;
-                Debug.Log("Player colidiu com o Enemy:" + playerCollisionCount + "Vez");
                 PlayerLocomotion player = collision.gameObject.GetComponent<PlayerLocomotion>();
-                if (player != null)
+                Debug.Log("Enemy: Colidi com o Player");
+
+                if (player != null && player.enemyHolder.checkCanAddEnemies())
                 {
+                    Debug.Log("Enemy: Posso ser adicionado ao Player");
                     Vector3 forceDirection = player.GetPlayerDirection();
-
-                    if (playerCollisionCount == 1)
-                    {
-                        player.TriggerPunch();
-                        Debug.Log("Primeira Colisão");
-                        EnableRagdoll(forceDirection);
-                    }
-                    else if (playerCollisionCount == 2)
-                    {
-                        Debug.Log("Segunda Colisão");
-                    }
-
-                    StartCoroutine(DisableCollider());
+                    player.TriggerPunch();
+                    EnableRagdoll(forceDirection);
+                    StartCoroutine(AddEnemyTimer(player));
                 }
             }
-
         }
     }
-    IEnumerator DisableCollider()
-    {
-        canCollide = false;
-        yield return new WaitForSeconds(collisionCooldown);
-        canCollide = true;
-    }
 
-    IEnumerator EnableMainCollider()
+    private IEnumerator AddEnemyTimer(Player player)
     {
-        _mainCollider.enabled = false;
-        yield return new WaitForSeconds(collisionCooldown);
-        _mainCollider.enabled = true;
+        yield return new WaitForSeconds(1.5f);
+        player.addEnemy(this);
     }
 }
