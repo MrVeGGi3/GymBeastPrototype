@@ -9,3 +9,5 @@ Original Game
 10/07 - Implemented 3D movement, BlendTree of Animations, Joystick Implementation, Main Camera adjustments.
 
 11/07 - Enemy AI with Ragdoll, Collision with Player.
+
+14/07 - Enemy added to the Back of Player with "Inertia" Behaviour when the Player moves.
