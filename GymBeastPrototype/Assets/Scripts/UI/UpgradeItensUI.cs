@@ -5,32 +5,58 @@ public class UpgradeItensUI : MonoBehaviour
     public Canvas upgradeItensCanvas;
     private Collider _upgradeCollider;
    
+    private void Awake()
+    {
+        if(upgradeItensCanvas == null)
+        {
+            Debug.LogWarning("Upgrade Canvas não foi atribuido");
+        }
+        else
+        {
+            DeactivateCanvasVisibility();
+        }
+    }
     void Start()
     {
         _upgradeCollider = GetComponent<Collider>(); 
-        DeactivateCanvasVisibility();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player != null)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            upgradeItensCanvas.gameObject.SetActive(true);
+            if(upgradeItensCanvas != null)
+            {
+                ActivateCanvasVisibility();
+                Debug.Log("Canvas Acionado!");
+            }
+        }
+        else
+        {
+            Debug.Log("Player não foi encontrado");
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            DeactivateCanvasVisibility();
+            if (upgradeItensCanvas != null)
+            {
+                DeactivateCanvasVisibility();
+                Debug.Log("Canvas Acionado!");
+            }
+           ;
         }
     }
 
     private void DeactivateCanvasVisibility()
     {
         upgradeItensCanvas.gameObject.SetActive(false);
+    }
+
+    private void ActivateCanvasVisibility()
+    {
+        upgradeItensCanvas.gameObject.SetActive(true);
     }
 }
