@@ -37,7 +37,7 @@ public class EnemyHolder : MonoBehaviour
 
     private void Update()
     {
-        if (enemies.Count > 0)
+        if (enemies.Count > 0 && enemies != null)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -59,19 +59,26 @@ public class EnemyHolder : MonoBehaviour
                     targetRotation = previousTransform.rotation;
                 }
 
-                // Calcula velocidade simulada com base no alvo
+               
                 Vector3 currentVelocity = enemyVelocities[currentEnemy];
                 Vector3 desiredVelocity = (targetPosition - currentTransform.position) * inertiaFactor;
                 currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity, Time.deltaTime * inertiaFactor);
 
-                // Atualiza posição e salva nova velocidade
+               
                 currentTransform.position += currentVelocity * Time.deltaTime;
                 enemyVelocities[currentEnemy] = currentVelocity;
 
-                // Suaviza rotação
+                
                 currentTransform.rotation = Quaternion.Lerp(currentTransform.rotation, targetRotation, Time.deltaTime * 10f);
             }
         }
+        else return;
+    }
+    public void ResetEnemiesCount()
+    {
+        enemiesCollected = 0;
+        enemyVelocities.Clear();
+        enemies.Clear();
     }
 
 }

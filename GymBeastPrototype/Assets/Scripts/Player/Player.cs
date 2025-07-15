@@ -5,11 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour 
 {
 
-    [Header("Money")]
-    public float moneyCatched;
     [Header("EnemyHolder Component")]
     [SerializeField] public EnemyHolder enemyHolder;
-  
+    public List<SkinnedMeshRenderer> renderers = new List<SkinnedMeshRenderer>();
 
     public void addEnemy(EnemyCollisionBehaviour enemy)
     {

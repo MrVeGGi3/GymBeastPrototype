@@ -3,19 +3,19 @@ using System.Collections;
 using Unity.VisualScripting;
 
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IValuable
 {
-    private bool playerCarrying = false;
+    [Header("Enemy Value")]
+    [SerializeField] public int enemyValue;
 
-    public bool GetPlayerCarrying()
+    public int GetValue()
     {
-        return playerCarrying;
+        return enemyValue;
     }
 
-    public void SetPlayerCarryingStatus()
+    public void eliminateEnemy()
     {
-        playerCarrying = true;
+        Destroy(gameObject);
     }
-
 
 }

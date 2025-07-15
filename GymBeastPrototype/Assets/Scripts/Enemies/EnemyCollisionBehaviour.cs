@@ -93,6 +93,11 @@ public class EnemyCollisionBehaviour : Enemy
                     EnableRagdoll(forceDirection);
                     StartCoroutine(AddEnemyTimer(player));
                 }
+
+                else
+                {
+                    return;
+                }
             }
         }
     }
