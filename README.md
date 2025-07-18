@@ -1,5 +1,5 @@
 # GymBeastPrototype
-Prototype of GymBeast for Unity 6
+Prototype of GymBeast for Android App.
 
 Prototype developed for the 67 Bits test.
 
